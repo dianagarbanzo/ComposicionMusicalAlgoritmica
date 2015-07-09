@@ -55,7 +55,7 @@ loop_through_list(File, [Head|Tail]) :-
     loop_through_list(File, Tail).
 
 escribirLista(List) :-
-    open('prueba.txt', write, File),
+    open('cancion.txt', write, File),
     loop_through_list(File, List),
     close(File).
 
@@ -122,13 +122,15 @@ generarMelodia(E,S,D,M) :-
 
 % generarNotas/4(+escala,+duracionRestante,+notaAnterior,+duracionAnterior,-listaNotas)
 generarNotas(_,_,0,_,_,[]).     % Si la duración restante es 0, retorna la lista que ya trae
+generarNotas(_,_,0.0,_,_,[]).   % Si la duración restante es 0, retorna la lista que ya trae
 generarNotas(E,S,D,I,Q,X) :-
+	print(D),
     random_between(1,5,R),      % Crea un desplazamiento aleatorio a partir de la nota actual para la siguiente, por ahora entre 1 y 5
 	random_between(0,1,U),		% Crea un número aleatorio para escoger el signo del desplazamiento, 0 negativo, 1 positivo
     generarNotaSiguiente(E,S,I,R,U,N),
-	% generarDuracionSiguiente(Q,Z),% Escoje una duración para esta nueva nota
-    % redondearDuracion(D,Z,K),	% Se asegura de no sobrepasar el máximo del compás
-	K is 1,
+	generarDuracionSiguiente(Q,Z),% Escoje una duración para esta nueva nota
+    redondearDuracion(D,Z,K),	% Se asegura de no sobrepasar el máximo del compás
+	% K is 1,
     P is D - K,                 % Duración total - duración de nueva nota
     concatena([N],[K],B),       % Genera el par nota,duracion "B" para la siguiente nota
     generarNotas(E,S,P,N,K,M),  % Continúa generando notas
@@ -173,8 +175,8 @@ generarDuracion(V,D,N) :-
 	N is A.
 generarDuracion(V,D,N) :-
 	D == 1,						% La nueva será la mitad de la anterior
-	A is V/2,
-	A < 1/8,					% Duración mínima: 1/4
+	% A is V/2,
+	% A <= 1/8,					% Duración mínima: 1/4
 	B is V*2,					% Si es menor a eso, se duplica en lugar de dividir
 	N is B.
 generarDuracion(V,D,N) :-
@@ -187,17 +189,16 @@ generarDuracion(V,D,N) :-
 	N is A.
 generarDuracion(V,D,N) :-
 	D == 3,						% La nueva será la mitad de la anterior
-	A is V*2,
-	A > 4,						% Duración máxima: 2
+	% A is V*2,
+	% A >= 4,						% Duración máxima: 2
 	B is V/2,					% Si es menor a eso, se duplica en lugar de dividir
 	N is B.
 % redondearDuracion(+maximo,+duracionMala,-redondeo)
 redondearDuracion(M,D,R) :-
-	D > M,						% Si se generó una duración que excede el máximo
-	R is M.						% se le resta la diferencia a esa duración
-redondearDuracion(M,D,R) :-
 	D < M,						% Si se generó una duración que excede el máximo
 	R is D.						% se le resta la diferencia a esa duración
+redondearDuracion(M,D,R) :-		% En cualquier otro caso (>=)
+	R is M.						% se le resta la diferencia a esa duración
 	
 %
 % generarTransicion/3(+escala,+duracionTotal,-verso)
