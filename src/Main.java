@@ -1,7 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Proyecto de composición musical algorítmica.
+ * Paradigmas computacionales, Escuela de Ciencias de la Computación e Informática, UCR.
+ * 
+ * Este código de Java contiene la interfaz que interactúa con el usuario para
+ * reproducir la música generada desde Prolog. Sin un archivo musical válido 
+ * generado por Prolog esta interfaz no debería poder funcionar.
+ *
+ * Julio, 2015.
  */
 import javax.swing.JFrame;
 import org.jvnet.substance.SubstanceLookAndFeel;
