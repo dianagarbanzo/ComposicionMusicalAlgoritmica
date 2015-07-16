@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
-import jpl.*;
-import jpl.Query;
 
 /**
  *
@@ -26,34 +24,13 @@ public class ConexionProlog {
      * Metodo encargado de compilar el archivo, hacer el llamado a la regla y de
      * leer los datos del archivo generado
      */
-    protected String[] ejecutarConsulta(boolean conMelodia, String lista, boolean generarNuevo) {
+    protected String[] ejecutarConsulta(String nombreArchivo, boolean conMelodia) {
         String[] resultado = null;
-        if(generarNuevo)
-        {
-            // Variables para compilar el archivo de prolog
-            String stringCompilacion = "consult('Compositor.pl')";
-            Query queryDeCompilacion = new Query(stringCompilacion);
-            // Impresion del resultado de la impresion
-            System.out.println(queryDeCompilacion.hasSolution() ? "correcto":"fallo");
-            // String para llamar a la regla, segun los parametros asociados
-            String stringLlamadaRegla = "";
-            if(!conMelodia) {
-                stringLlamadaRegla = "cancionRock([],[],C)";
-            } else {
-                stringLlamadaRegla = "cancionRock([],"+ lista +",C)";
-            }
-            // Query para ejecutar la regla
-            Query queryLlamadaRegla  = new Query(stringLlamadaRegla);
-            // Lectura del resultado
-            if (queryLlamadaRegla.hasMoreSolutions()) {
-               queryLlamadaRegla.nextSolution();
-               //System.out.println(s2.toString());
-            }
-        }
-        
+        if(("").equals(nombreArchivo))
+            nombreArchivo = "cancion.txt";
         try {
             // Se abre el archivo
-            FileInputStream fstream = new FileInputStream("prueba.txt");
+            FileInputStream fstream = new FileInputStream(nombreArchivo);
             // Se crea el objeto de entrada
             DataInputStream entrada = new DataInputStream(fstream);
             // Se crea el Buffer de Lectura
